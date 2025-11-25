@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Book Store{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Book Store</h1>
+<p class="subtitle">Browse our books and read or share reviews.</p>
+
+<table class="book-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Description</th>
+            <th>Reviews</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>
+                <a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a>
+            </td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.description or "No description available." }}</td>
+            <td>
+                <a class="btn" href="{{ url_for('book_detail', book_id=book.id) }}">View / Add Reviews</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="empty-state">
+                No books found. Add seeding logic or insert books manually in the database.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

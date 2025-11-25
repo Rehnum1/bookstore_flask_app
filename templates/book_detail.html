@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} &mdash; Book Details{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('list_books') }}" class="link-back">&larr; Back to all books</a>
+
+<section class="book-header">
+    <h1>{{ book.title }}</h1>
+    <p class="book-author">by {{ book.author }}</p>
+    {% if book.description %}
+        <p class="book-description">{{ book.description }}</p>
+    {% endif %}
+</section>
+
+<section class="reviews-section">
+    <h2>Reviews</h2>
+
+    {% if reviews %}
+    <table class="review-table">
+        <thead>
+            <tr>
+                <th>Reviewer</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+            <tr>
+                <td>{{ review.username }}</td>
+                <td>{{ review.rating }}/5</td>
+                <td>{{ review.comment }}</td>
+                <td>{{ review.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="empty-state">No reviews yet. Be the first to review this book!</p>
+    {% endif %}
+</section>
+
+<section class="add-review-section">
+    <h2>Add a Review</h2>
+    <form action="{{ url_for('add_review', book_id=book.id) }}" method="post" class="review-form">
+        <div class="form-group">
+            <label for="username">Your name</label>
+            <input type="text" id="username" name="username" required placeholder="Enter your name">
+        </div>
+
+        <div class="form-group">
+            <label for="rating">Rating (1–5)</label>
+            <select id="rating" name="rating" required>
+                <option value="">Select rating</option>
+                {% for i in range(1, 6) %}
+                <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Your review</label>
+            <textarea id="comment" name="comment" rows="4" required placeholder="Write your thoughts about this book"></textarea>
+        </div>
+
+        <button type="submit" class="btn primary">Submit Review</button>
+    </form>
+</section>
+{% endblock %}
